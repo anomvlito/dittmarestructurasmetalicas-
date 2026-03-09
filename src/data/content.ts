@@ -103,7 +103,6 @@ export const stats = [
   { value: "+200", label: "Proyectos completados" },
   { value: "+10", label: "Años de experiencia" },
   { value: "100%", label: "Proyectos entregados en plazo" },
-  { value: "5★", label: "Calificación de clientes" },
 ];
 
 export const reasons = [

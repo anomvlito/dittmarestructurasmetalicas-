@@ -185,7 +185,7 @@ export default function Home() {
 
         {/* Stats bar overlaying bottom of hero */}
         <div className="absolute bottom-0 w-full border-t border-zinc-800 bg-zinc-950/80 backdrop-blur-md z-20">
-          <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 divide-x divide-zinc-800">
+          <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-2 md:grid-cols-3 gap-6 divide-x divide-zinc-800">
             {stats.map((stat, idx) => (
               <div key={stat.label} className={`text-center ${idx % 2 !== 0 ? 'border-l border-zinc-800 md:border-0' : ''} ${idx >= 2 ? 'md:border-l' : ''}`}>
                 <div className="font-display font-black text-3xl md:text-4xl text-yellow-500 mb-1">{stat.value}</div>
