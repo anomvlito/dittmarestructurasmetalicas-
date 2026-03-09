@@ -130,7 +130,7 @@ export default function Home() {
       {/* ── Hero ── */}
       <section
         id="inicio"
-        className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden bg-zinc-950"
+        className="relative min-h-[100dvh] md:min-h-[90vh] flex flex-col justify-center overflow-hidden bg-zinc-950 pb-56 pt-28 md:pb-32 md:pt-0"
         aria-label="Bienvenida"
       >
         <div className="absolute inset-0 z-0">
@@ -147,18 +147,18 @@ export default function Home() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 w-full">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 border border-zinc-700 bg-zinc-900/50 backdrop-blur-sm text-zinc-300 text-xs font-bold px-4 py-2 rounded-sm mb-6 tracking-widest uppercase">
+            <div className="inline-flex items-center gap-2 border border-zinc-700 bg-zinc-900/50 backdrop-blur-sm text-zinc-300 text-[10px] md:text-xs font-bold px-4 py-2 rounded-sm mb-6 tracking-widest uppercase">
                <span className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
                Expertos en Acero · Región Metropolitana
             </div>
 
-            <h1 className="font-display font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] text-white mb-6 uppercase tracking-tight">
+            <h1 className="font-display font-black text-4xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] text-white mb-6 uppercase tracking-tight">
               Construimos<br/>
               con <span className="text-yellow-500">acero</span>.<br/>
               Duramos <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-300 to-zinc-600">décadas</span>.
             </h1>
 
-            <p className="text-zinc-400 text-lg md:text-xl md:leading-relaxed mb-10 max-w-xl font-medium">
+            <p className="text-zinc-400 text-base md:text-xl md:leading-relaxed mb-10 max-w-xl font-medium">
               Fabricación e instalación de galpones, cobertizos y estructuras metálicas de alta precisión. 
               Garantía estructural y plazos cumplidos al 100%.
             </p>
@@ -185,11 +185,20 @@ export default function Home() {
 
         {/* Stats bar overlaying bottom of hero */}
         <div className="absolute bottom-0 w-full border-t border-zinc-800 bg-zinc-950/80 backdrop-blur-md z-20">
-          <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-2 md:grid-cols-3 gap-6 divide-x divide-zinc-800">
+          <div className="max-w-7xl mx-auto px-2 py-8 grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-0">
             {stats.map((stat, idx) => (
-              <div key={stat.label} className={`text-center ${idx % 2 !== 0 ? 'border-l border-zinc-800 md:border-0' : ''} ${idx >= 2 ? 'md:border-l' : ''}`}>
+              <div 
+                key={stat.label} 
+                className={`text-center px-2 flex flex-col justify-center ${
+                  idx === 1 
+                    ? 'border-l border-zinc-800' 
+                    : idx === 2 
+                      ? 'border-l-0 md:border-l border-zinc-800' 
+                      : ''
+                }`}
+              >
                 <div className="font-display font-black text-3xl md:text-4xl text-yellow-500 mb-1">{stat.value}</div>
-                <div className="text-zinc-400 text-xs md:text-sm font-semibold uppercase tracking-widest">{stat.label}</div>
+                <div className="text-zinc-400 text-[10px] sm:text-xs font-semibold uppercase tracking-widest">{stat.label}</div>
               </div>
             ))}
           </div>
