@@ -185,17 +185,13 @@ export default function Home() {
 
         {/* Stats bar overlaying bottom of hero */}
         <div className="absolute bottom-0 w-full border-t border-zinc-800 bg-zinc-950/80 backdrop-blur-md z-20">
-          <div className="max-w-7xl mx-auto px-2 py-8 grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-0">
+          <div className="max-w-7xl mx-auto px-2 py-8 grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-0">
             {stats.map((stat, idx) => (
               <div 
                 key={stat.label} 
                 className={`text-center px-2 flex flex-col justify-center ${
-                  idx === 1 
-                    ? 'border-l border-zinc-800' 
-                    : idx === 2 
-                      ? 'border-l-0 md:border-l border-zinc-800' 
-                      : ''
-                }`}
+                  idx % 2 !== 0 ? 'border-l border-zinc-800' : ''
+                } ${idx > 0 && idx % 2 === 0 ? 'md:border-l md:border-zinc-800' : ''}`}
               >
                 <div className="font-display font-black text-3xl md:text-4xl text-yellow-500 mb-1">{stat.value}</div>
                 <div className="text-zinc-400 text-[10px] sm:text-xs font-semibold uppercase tracking-widest">{stat.label}</div>
