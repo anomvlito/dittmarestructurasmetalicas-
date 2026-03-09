@@ -1,8 +1,8 @@
 export const businessInfo = {
   name: "Dittmar Estructuras Metálicas",
   tagline: "Construimos con acero. Duramos décadas.",
-  phone: "+56900000000", // TODO: actualizar con número real
-  whatsapp: "+56900000000", // TODO: actualizar con número real
+  phone: "+56935453950",
+  whatsapp: "+56935453950",
   email: "contacto@dittmar.cl", // TODO: actualizar
   address: "Santiago, Región Metropolitana",
   instagram: "dittmar.estructurasmetalicas",

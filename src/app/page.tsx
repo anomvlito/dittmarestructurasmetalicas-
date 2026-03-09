@@ -1,11 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { useState, useEffect } from "react";
 import { businessInfo, services, stats, reasons } from "@/data/content";
+import type { InstagramPost } from "@/app/api/instagram/route";
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [instagramPosts, setInstagramPosts] = useState<InstagramPost[]>([]);
+
+  useEffect(() => {
+    fetch("/api/instagram")
+      .then((r) => r.json())
+      .then(setInstagramPosts)
+      .catch(() => {});
+  }, []);
 
   const whatsappUrl = `https://wa.me/${businessInfo.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent("Hola, me gustaría solicitar un presupuesto para una estructura metálica.")}`;
 
@@ -269,34 +277,46 @@ export default function Home() {
           </div>
 
           {/* Gallery grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Placeholder mientras no hay fotos reales */}
-            {[
-              { label: "Galpón Industrial", sub: "Quilicura, RM" },
-              { label: "Cobertizo Residencial", sub: "Las Condes, RM" },
-              { label: "Carport x4", sub: "La Florida, RM" },
-              { label: "Estructura Mezanina", sub: "Pudahuel, RM" },
-              { label: "Techado Industrial", sub: "Maipú, RM" },
-              { label: "Escalera Metálica", sub: "Providencia, RM" },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="group relative aspect-[4/3] bg-dark-800 rounded-2xl overflow-hidden border border-white/5 hover:border-brand/30 transition-all"
-              >
-                {/* Placeholder image area */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-dark-700 to-dark-900">
-                  <span className="material-symbols-outlined text-brand/30 text-6xl mb-3">
-                    {i % 2 === 0 ? "warehouse" : i % 3 === 0 ? "roofing" : "construction"}
-                  </span>
-                  <div className="text-white/20 text-xs">Foto próximamente</div>
-                </div>
-                {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-dark-900/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1">
-                  <p className="font-display font-bold text-lg">{item.label}</p>
-                  <p className="text-brand text-sm">{item.sub}</p>
-                </div>
-              </div>
-            ))}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+            {instagramPosts.length > 0
+              ? instagramPosts.slice(0, 9).map((post) => (
+                  <a
+                    key={post.id}
+                    href={post.permalink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative aspect-square bg-dark-800 rounded-2xl overflow-hidden border border-white/5 hover:border-brand/30 transition-all"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={post.media_url}
+                      alt={post.caption?.slice(0, 80) ?? "Proyecto Dittmar"}
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-500"
+                    />
+                    <div className="absolute inset-0 bg-dark-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                      {post.caption && (
+                        <p className="text-white text-xs leading-snug line-clamp-3">
+                          {post.caption.slice(0, 100)}
+                          {post.caption.length > 100 ? "…" : ""}
+                        </p>
+                      )}
+                    </div>
+                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="material-symbols-outlined text-white text-lg drop-shadow">open_in_new</span>
+                    </div>
+                  </a>
+                ))
+              : /* Placeholders mientras carga o sin token */
+                Array.from({ length: 6 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="aspect-square bg-dark-800 rounded-2xl overflow-hidden border border-white/5 flex flex-col items-center justify-center gap-2 animate-pulse"
+                  >
+                    <span className="material-symbols-outlined text-brand/20 text-5xl">
+                      {i % 3 === 0 ? "warehouse" : i % 3 === 1 ? "roofing" : "construction"}
+                    </span>
+                  </div>
+                ))}
           </div>
 
           <div className="text-center mt-10">
