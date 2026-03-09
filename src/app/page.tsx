@@ -1,46 +1,46 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import Image from "next/image";
 import { businessInfo, services, stats, reasons } from "@/data/content";
-import type { InstagramPost } from "@/app/api/instagram/route";
+
+const localGalleryImages = [
+  "/images/foto-1.webp",
+  "/images/foto-2.webp",
+  "/images/foto-3.webp"
+];
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [instagramPosts, setInstagramPosts] = useState<InstagramPost[]>([]);
-
-  useEffect(() => {
-    fetch("/api/instagram")
-      .then((r) => r.json())
-      .then(setInstagramPosts)
-      .catch(() => {});
-  }, []);
 
   const whatsappUrl = `https://wa.me/${businessInfo.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent("Hola, me gustaría solicitar un presupuesto para una estructura metálica.")}`;
 
   const navLinks = [
     ["Servicios", "#servicios"],
+    ["Por Qué Elegirnos", "#ventajas"],
     ["Proyectos", "#proyectos"],
     ["Nosotros", "#nosotros"],
     ["Contacto", "#contacto"],
   ];
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen font-sans">
       {/* ── Top Bar ── */}
-      <div className="bg-dark-950 border-b border-white/5 py-2 px-4 hidden md:flex items-center justify-center gap-8 text-xs text-white/40">
-        <span className="flex items-center gap-1.5">
-          <span className="material-symbols-outlined text-sm text-brand">location_on</span>
+      <div className="bg-zinc-950 border-b border-zinc-800 py-2 px-4 hidden md:flex items-center justify-center gap-8 text-xs text-zinc-400 font-medium tracking-wide">
+        <span className="flex items-center gap-1.5" aria-hidden="true">
+          <span className="material-symbols-outlined text-sm text-yellow-500">location_on</span>
           {businessInfo.address}
         </span>
-        <span className="flex items-center gap-1.5">
-          <span className="material-symbols-outlined text-sm text-brand">schedule</span>
+        <span className="flex items-center gap-1.5" aria-hidden="true">
+          <span className="material-symbols-outlined text-sm text-yellow-500">schedule</span>
           Lunes a Viernes 8:00 – 18:00 · Sábado 9:00 – 13:00
         </span>
         <a
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 hover:text-brand transition-colors"
+          className="flex items-center gap-1.5 hover:text-yellow-500 transition-colors"
+          aria-label="Llamar o escribir al teléfono de contacto"
         >
           <span className="material-symbols-outlined text-sm">phone</span>
           {businessInfo.phone}
@@ -48,26 +48,29 @@ export default function Home() {
       </div>
 
       {/* ── Navbar ── */}
-      <nav className="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-white/10">
+      <nav 
+        className="sticky top-0 z-50 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800"
+        aria-label="Navegación principal"
+      >
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
           {/* Logo */}
-          <a href="#inicio" className="flex items-center gap-3 shrink-0">
-            <div className="w-9 h-9 bg-brand rounded-lg flex items-center justify-center">
-              <span className="material-symbols-outlined text-white text-xl font-bold">architecture</span>
+          <a href="#inicio" className="flex items-center gap-3 shrink-0 group" aria-label="Inicio">
+            <div className="w-10 h-10 bg-yellow-500 group-hover:bg-yellow-400 transition-colors rounded flex items-center justify-center">
+              <span className="material-symbols-outlined text-zinc-900 text-2xl font-bold">architecture</span>
             </div>
             <div className="leading-tight">
-              <div className="font-display font-bold text-sm text-white tracking-wide">DITTMAR</div>
-              <div className="text-[10px] text-white/40 tracking-widest uppercase">Estructuras Metálicas</div>
+              <div className="font-display font-extrabold text-sm text-white tracking-widest uppercase">DITTMAR</div>
+              <div className="text-[10px] text-zinc-400 font-medium uppercase tracking-widest">Estructuras Metálicas</div>
             </div>
           </a>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-7">
+          <div className="hidden lg:flex items-center gap-8">
             {navLinks.map(([label, href]) => (
               <a
                 key={href}
                 href={href}
-                className="text-sm text-white/60 hover:text-white transition-colors font-medium"
+                className="text-sm font-semibold text-zinc-300 hover:text-yellow-500 transition-colors uppercase tracking-wider"
               >
                 {label}
               </a>
@@ -75,22 +78,23 @@ export default function Home() {
           </div>
 
           {/* CTA + mobile toggle */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden md:flex items-center gap-2 bg-brand hover:bg-brand-dark text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+              className="hidden md:flex items-center gap-2 border-2 border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-zinc-950 px-5 py-2 rounded-sm text-sm font-bold uppercase tracking-wider transition-all"
             >
-              <span className="material-symbols-outlined text-base">chat</span>
-              Cotizar gratis
+              <span className="material-symbols-outlined text-base">engineering</span>
+              Cotizar Proyecto
             </a>
             <button
-              className="md:hidden text-white/70 hover:text-white p-1"
+              className="lg:hidden text-zinc-300 hover:text-white p-1"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Menú"
+              aria-expanded={isMobileMenuOpen}
+              aria-label="Abrir menú"
             >
-              <span className="material-symbols-outlined">
+              <span className="material-symbols-outlined text-3xl">
                 {isMobileMenuOpen ? "close" : "menu"}
               </span>
             </button>
@@ -99,13 +103,13 @@ export default function Home() {
 
         {/* Mobile drawer */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-dark-800 border-t border-white/10 px-4 py-4 flex flex-col gap-1">
+          <div className="lg:hidden bg-zinc-900 border-t border-zinc-800 px-4 py-6 flex flex-col gap-4 shadow-2xl">
             {navLinks.map(([label, href]) => (
               <a
                 key={href}
                 href={href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-white/70 hover:text-white hover:bg-dark-700 rounded-lg px-3 py-3 text-sm font-medium transition-colors"
+                className="text-zinc-200 hover:text-yellow-500 text-base font-bold uppercase tracking-wider transition-colors"
               >
                 {label}
               </a>
@@ -114,10 +118,10 @@ export default function Home() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 flex items-center justify-center gap-2 bg-brand text-white px-4 py-3 rounded-lg text-sm font-semibold"
+              className="mt-4 flex items-center justify-center gap-2 bg-yellow-500 text-zinc-900 px-4 py-4 rounded-sm text-sm font-bold uppercase tracking-widest"
             >
-              <span className="material-symbols-outlined text-base">chat</span>
-              Cotizar gratis por WhatsApp
+              <span className="material-symbols-outlined text-base">engineering</span>
+              Cotizar ahora
             </a>
           </div>
         )}
@@ -126,67 +130,66 @@ export default function Home() {
       {/* ── Hero ── */}
       <section
         id="inicio"
-        className="relative min-h-[90vh] flex items-center justify-center overflow-hidden"
+        className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden bg-zinc-950"
+        aria-label="Bienvenida"
       >
-        {/* Background grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              "linear-gradient(#3b82f6 1px, transparent 1px), linear-gradient(90deg, #3b82f6 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-dark-950/80 via-transparent to-dark-900" />
-        {/* Accent glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="/images/foto-1.webp" 
+            alt="Estructura metálica industrial en construcción" 
+            fill 
+            className="object-cover opacity-40 mix-blend-luminosity grayscale-[30%]"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent" />
+        </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
-          <div className="inline-flex items-center gap-2 bg-brand/10 border border-brand/20 text-brand text-xs font-semibold px-4 py-2 rounded-full mb-8 tracking-wide uppercase">
-            <span className="material-symbols-outlined text-sm">verified</span>
-            Santiago · Chile
-          </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 w-full">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 border border-zinc-700 bg-zinc-900/50 backdrop-blur-sm text-zinc-300 text-xs font-bold px-4 py-2 rounded-sm mb-6 tracking-widest uppercase">
+               <span className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
+               Expertos en Acero · Región Metropolitana
+            </div>
 
-          <h1 className="font-display font-black text-5xl md:text-7xl xl:text-8xl leading-[0.95] mb-6 tracking-tight">
-            Estructuras{" "}
-            <span className="text-brand">metálicas</span>
-            <br />
-            que duran décadas.
-          </h1>
+            <h1 className="font-display font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] text-white mb-6 uppercase tracking-tight">
+              Construimos<br/>
+              con <span className="text-yellow-500">acero</span>.<br/>
+              Duramos <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-300 to-zinc-600">décadas</span>.
+            </h1>
 
-          <p className="text-white/50 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
-            Fabricamos e instalamos galpones, cobertizos, carport y estructuras
-            a medida en Santiago. Presupuesto gratuito y sin compromiso.
-          </p>
+            <p className="text-zinc-400 text-lg md:text-xl md:leading-relaxed mb-10 max-w-xl font-medium">
+              Fabricación e instalación de galpones, cobertizos y estructuras metálicas de alta precisión. 
+              Garantía estructural y plazos cumplidos al 100%.
+            </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 bg-brand hover:bg-brand-dark text-white font-bold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 shadow-lg shadow-brand/20"
-            >
-              <span className="material-symbols-outlined">chat</span>
-              Pedir presupuesto gratis
-            </a>
-            <a
-              href="#servicios"
-              className="flex items-center gap-2 text-white/60 hover:text-white border border-white/10 hover:border-white/30 px-8 py-4 rounded-xl text-base font-medium transition-all"
-            >
-              Ver servicios
-              <span className="material-symbols-outlined text-base">arrow_downward</span>
-            </a>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto flex items-center justify-center gap-3 bg-yellow-500 hover:bg-yellow-400 text-zinc-950 font-bold px-8 py-4 rounded-sm text-base uppercase tracking-widest transition-all hover:-translate-y-1 shadow-[0_0_20px_rgba(234,179,8,0.3)]"
+              >
+                <span className="material-symbols-outlined">request_quote</span>
+                Quiero cotizar
+              </a>
+              <a
+                href="#proyectos"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 text-white bg-zinc-800 hover:bg-zinc-700 px-8 py-4 rounded-sm text-base font-bold uppercase tracking-widest transition-all"
+              >
+                Ver obras
+              </a>
+            </div>
           </div>
         </div>
 
-        {/* Stats bar */}
-        <div className="absolute bottom-0 left-0 right-0 bg-dark-800/80 backdrop-blur-sm border-t border-white/5">
-          <div className="max-w-7xl mx-auto px-4 py-5 grid grid-cols-2 md:grid-cols-4 gap-6">
-            {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="font-display font-black text-2xl text-brand">{stat.value}</div>
-                <div className="text-white/40 text-xs mt-1">{stat.label}</div>
+        {/* Stats bar overlaying bottom of hero */}
+        <div className="absolute bottom-0 w-full border-t border-zinc-800 bg-zinc-950/80 backdrop-blur-md z-20">
+          <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 divide-x divide-zinc-800">
+            {stats.map((stat, idx) => (
+              <div key={stat.label} className={`text-center ${idx % 2 !== 0 ? 'border-l border-zinc-800 md:border-0' : ''} ${idx >= 2 ? 'md:border-l' : ''}`}>
+                <div className="font-display font-black text-3xl md:text-4xl text-yellow-500 mb-1">{stat.value}</div>
+                <div className="text-zinc-400 text-xs md:text-sm font-semibold uppercase tracking-widest">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -194,67 +197,82 @@ export default function Home() {
       </section>
 
       {/* ── Servicios ── */}
-      <section id="servicios" className="py-24 px-4">
+      <section id="servicios" className="py-24 md:py-32 px-4 bg-zinc-900" aria-label="Nuestros Servicios">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-brand text-sm font-semibold tracking-widest uppercase mb-3">
-              Lo que hacemos
-            </p>
-            <h2 className="font-display font-black text-4xl md:text-5xl">
-              Nuestros <span className="text-brand">servicios</span>
-            </h2>
-            <p className="text-white/40 mt-4 max-w-xl mx-auto">
-              Desde pequeños cobertizos hasta galpones industriales de gran escala.
-              Cada proyecto diseñado y ejecutado a medida.
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="h-0.5 w-12 bg-yellow-500"></div>
+                <p className="text-yellow-500 text-sm font-bold tracking-widest uppercase">
+                  Capacidades
+                </p>
+              </div>
+              <h2 className="font-display font-black text-4xl md:text-5xl lg:text-6xl text-white uppercase tracking-tight">
+                Nuestros Servicios
+              </h2>
+            </div>
+            <p className="text-zinc-400 text-lg md:text-xl font-medium max-w-md">
+              Soluciones integrales de maestranza y montaje estructural diseñadas a la medida de tu proyecto.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service) => (
-              <div
+              <article
                 key={service.id}
-                className="group bg-dark-800 hover:bg-dark-700 border border-white/5 hover:border-brand/20 rounded-2xl p-6 transition-all duration-300"
+                className="group bg-zinc-950 border border-zinc-800 p-8 hover:border-yellow-500/50 transition-colors relative overflow-hidden"
+                itemScope 
+                itemType="https://schema.org/Service"
               >
-                <div className="w-12 h-12 bg-brand/10 group-hover:bg-brand/20 rounded-xl flex items-center justify-center mb-5 transition-colors">
-                  <span className="material-symbols-outlined text-brand text-2xl">{service.icon}</span>
+                <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                   <span className="material-symbols-outlined text-9xl">{service.icon}</span>
                 </div>
-                <h3 className="font-display font-bold text-xl mb-3">{service.title}</h3>
-                <p className="text-white/50 text-sm leading-relaxed mb-5">
-                  {service.description}
-                </p>
-                <ul className="space-y-2">
-                  {service.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-white/60">
-                      <span className="material-symbols-outlined text-brand text-base mt-0.5 shrink-0">check_circle</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                <div className="relative z-10">
+                  <div className="w-14 h-14 bg-zinc-900 border border-zinc-800 group-hover:bg-yellow-500 flex items-center justify-center mb-6 transition-colors">
+                    <span className="material-symbols-outlined text-yellow-500 group-hover:text-zinc-950 text-3xl transition-colors">{service.icon}</span>
+                  </div>
+                  <h3 className="font-display font-extrabold text-2xl text-white mb-4 uppercase tracking-wide" itemProp="name">{service.title}</h3>
+                  <p className="text-zinc-400 text-base leading-relaxed mb-8 min-h-[80px]" itemProp="description">
+                    {service.description}
+                  </p>
+                  <ul className="space-y-3">
+                    {service.features.map((f) => (
+                      <li key={f} className="flex items-start gap-3 text-sm text-zinc-300 font-medium">
+                        <span className="material-symbols-outlined text-yellow-500 text-lg shrink-0">done</span>
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
       {/* ── Por qué elegirnos ── */}
-      <section className="py-20 px-4 bg-dark-800/40">
+      <section id="ventajas" className="py-24 px-4 bg-zinc-950 border-y border-zinc-800">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-brand text-sm font-semibold tracking-widest uppercase mb-3">
-              Nuestra diferencia
-            </p>
-            <h2 className="font-display font-black text-4xl md:text-5xl">
+          <div className="text-center mb-16">
+             <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="h-0.5 w-8 bg-yellow-500"></div>
+                <p className="text-yellow-500 text-sm font-bold tracking-widest uppercase">
+                  Nuestra diferencia
+                </p>
+                <div className="h-0.5 w-8 bg-yellow-500"></div>
+              </div>
+            <h2 className="font-display font-black text-4xl md:text-5xl text-white uppercase tracking-tight">
               ¿Por qué elegirnos?
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {reasons.map((reason) => (
-              <div key={reason.title} className="text-center px-4">
-                <div className="w-16 h-16 bg-brand/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <span className="material-symbols-outlined text-brand text-3xl">{reason.icon}</span>
+              <div key={reason.title} className="text-center">
+                <div className="w-20 h-20 bg-zinc-900 rounded-full border border-zinc-800 flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                  <span className="material-symbols-outlined text-yellow-500 text-4xl">{reason.icon}</span>
                 </div>
-                <h3 className="font-display font-bold text-lg mb-2">{reason.title}</h3>
-                <p className="text-white/40 text-sm leading-relaxed">{reason.description}</p>
+                <h3 className="font-display font-bold text-xl text-white mb-3 uppercase tracking-wide">{reason.title}</h3>
+                <p className="text-zinc-400 text-base leading-relaxed">{reason.description}</p>
               </div>
             ))}
           </div>
@@ -262,310 +280,248 @@ export default function Home() {
       </section>
 
       {/* ── Proyectos / Galería ── */}
-      <section id="proyectos" className="py-24 px-4">
+      <section id="proyectos" className="py-24 md:py-32 px-4 bg-zinc-900" aria-label="Galería de proyectos">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-brand text-sm font-semibold tracking-widest uppercase mb-3">
-              Nuestro trabajo
-            </p>
-            <h2 className="font-display font-black text-4xl md:text-5xl">
-              Proyectos <span className="text-brand">realizados</span>
-            </h2>
-            <p className="text-white/40 mt-4 max-w-xl mx-auto">
-              Cada estructura es única. Aquí algunos de nuestros trabajos recientes.
-            </p>
-          </div>
-
-          {/* Gallery grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-            {instagramPosts.length > 0
-              ? instagramPosts.slice(0, 9).map((post) => (
-                  <a
-                    key={post.id}
-                    href={post.permalink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative aspect-square bg-dark-800 rounded-2xl overflow-hidden border border-white/5 hover:border-brand/30 transition-all"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={post.media_url}
-                      alt={post.caption?.slice(0, 80) ?? "Proyecto Dittmar"}
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-500"
-                    />
-                    <div className="absolute inset-0 bg-dark-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                      {post.caption && (
-                        <p className="text-white text-xs leading-snug line-clamp-3">
-                          {post.caption.slice(0, 100)}
-                          {post.caption.length > 100 ? "…" : ""}
-                        </p>
-                      )}
-                    </div>
-                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span className="material-symbols-outlined text-white text-lg drop-shadow">open_in_new</span>
-                    </div>
-                  </a>
-                ))
-              : /* Placeholders mientras carga o sin token */
-                Array.from({ length: 6 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="aspect-square bg-dark-800 rounded-2xl overflow-hidden border border-white/5 flex flex-col items-center justify-center gap-2 animate-pulse"
-                  >
-                    <span className="material-symbols-outlined text-brand/20 text-5xl">
-                      {i % 3 === 0 ? "warehouse" : i % 3 === 1 ? "roofing" : "construction"}
-                    </span>
-                  </div>
-                ))}
-          </div>
-
-          <div className="text-center mt-10">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="h-0.5 w-12 bg-yellow-500"></div>
+                <p className="text-yellow-500 text-sm font-bold tracking-widest uppercase">
+                  Portafolio Real
+                </p>
+              </div>
+              <h2 className="font-display font-black text-4xl md:text-5xl lg:text-6xl text-white uppercase tracking-tight">
+                Nuestro Trabajo
+              </h2>
+            </div>
             <a
               href={`https://www.instagram.com/${businessInfo.instagram}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 border border-white/10 hover:border-brand/40 text-white/60 hover:text-brand px-6 py-3 rounded-xl text-sm font-medium transition-all"
+              className="hidden md:inline-flex items-center gap-2 border-2 border-zinc-700 hover:border-yellow-500 text-white font-bold px-6 py-3 uppercase tracking-widest text-sm transition-all"
             >
-              <span className="material-symbols-outlined text-base">photo_library</span>
-              Ver más proyectos en Instagram
+              <span className="material-symbols-outlined text-lg">open_in_new</span>
+              Ver en Instagram
+            </a>
+          </div>
+
+          {/* Static Geometry Gallery */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {localGalleryImages.map((src, idx) => (
+              <div
+                key={idx}
+                className="relative aspect-square md:aspect-[4/5] bg-zinc-800 overflow-hidden group"
+              >
+                <Image
+                  src={src}
+                  alt={`Proyecto de estructura metálica Dittmar ${idx + 1}`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover grayscale-[40%] group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700"
+                />
+                {/* Overlay metálico en hover */}
+                <div className="absolute inset-0 bg-yellow-500/0 group-hover:bg-yellow-500/10 transition-colors duration-500 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-zinc-950 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                   <p className="text-white font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+                     <span className="material-symbols-outlined text-yellow-500 text-base">verified</span>
+                     Obra Finalizada
+                   </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 text-center md:hidden">
+             <a
+              href={`https://www.instagram.com/${businessInfo.instagram}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border-2 border-zinc-700 hover:border-yellow-500 text-white font-bold px-6 py-3 uppercase tracking-widest text-sm transition-all w-full justify-center"
+            >
+              <span className="material-symbols-outlined text-lg">open_in_new</span>
+              Ver Instagram
             </a>
           </div>
         </div>
       </section>
 
       {/* ── Nosotros ── */}
-      <section id="nosotros" className="py-24 px-4 bg-dark-800/40">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-          <div>
-            <p className="text-brand text-sm font-semibold tracking-widest uppercase mb-4">
-              Quiénes somos
-            </p>
-            <h2 className="font-display font-black text-4xl md:text-5xl leading-tight mb-6">
-              Más de una{" "}
-              <span className="text-brand">década construyendo</span>{" "}
-              en acero.
+      <section id="nosotros" className="py-24 md:py-32 px-4 bg-zinc-950 relative overflow-hidden">
+        {/* Adorno visual */}
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-yellow-500/5 rounded-full blur-[150px] pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-16 items-center relative z-10">
+          <div className="lg:col-span-5">
+            <div className="relative aspect-[3/4] border-l-4 border-b-4 border-yellow-500 p-2">
+               <div className="relative w-full h-full bg-zinc-800 overflow-hidden">
+                 <Image 
+                   src="/images/foto-2.webp" 
+                   alt="Taller y equipo de constructores soldando estructura metálica"
+                   fill
+                   className="object-cover"
+                 />
+               </div>
+            </div>
+          </div>
+          
+          <div className="lg:col-span-7">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="h-0.5 w-12 bg-yellow-500"></div>
+              <p className="text-yellow-500 text-sm font-bold tracking-widest uppercase">
+                Sobre la empresa
+              </p>
+            </div>
+            <h2 className="font-display font-black text-4xl md:text-5xl lg:text-5xl leading-[1.1] text-white mb-8 uppercase tracking-tight">
+              Precisión, resistencia y cumplimiento <br/>
+              <span className="text-zinc-500">en cada soldadura.</span>
             </h2>
-            <div className="space-y-4 text-white/50 leading-relaxed">
+            <div className="space-y-6 text-zinc-400 text-lg font-medium leading-relaxed mb-10">
               <p>
-                Somos una empresa familiar especializada en fabricación e
-                instalación de estructuras metálicas en la Región Metropolitana.
-                Trabajamos con empresas industriales, constructoras y
-                particulares que exigen calidad y cumplimiento de plazos.
+                Somos una maestranza familiar especializada en estructuras 
+                metálicas pesadas y livianas. Atendemos a la industria, 
+                constructoras y proyectos particulares en toda la Región Metropolitana.
+              </p>
+              <p className="border-l-2 border-yellow-500 pl-6 text-zinc-300 italic">
+                “No transamos en calidad. Si un perfil debe ser de 3mm, se instala de 3mm. 
+                Construimos estructuras que resisten el paso del tiempo y las normativas sísmicas.”
               </p>
               <p>
-                Nuestro equipo cuenta con soldadores certificados y montajistas
-                con amplia experiencia en obra. Utilizamos materiales certificados
-                por normativa chilena y garantizamos cada trabajo ejecutado.
-              </p>
-              <p>
-                Desde el primer contacto hasta la entrega, te acompañamos en
-                cada etapa del proyecto. Sin letra chica, sin sorpresas.
+                Nuestro equipo cuenta con años de experiencia en terreno, uniendo el oficio 
+                metalúrgico tradicional con herramientas de vanguardia y soldadores calificados.
               </p>
             </div>
-            <div className="mt-8 flex items-center gap-4">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-brand hover:bg-brand-dark text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors"
-              >
-                <span className="material-symbols-outlined text-base">chat</span>
-                Contáctanos
-              </a>
-              <a
-                href={`https://www.instagram.com/${businessInfo.instagram}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-white/50 hover:text-white border border-white/10 hover:border-white/30 px-6 py-3 rounded-xl text-sm font-medium transition-all"
-              >
-                Instagram
-              </a>
-            </div>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 bg-white hover:bg-zinc-200 text-zinc-950 font-bold px-8 py-4 text-base uppercase tracking-widest transition-colors"
+            >
+              Hablemos de tu proyecto
+              <span className="material-symbols-outlined text-xl">arrow_forward</span>
+            </a>
           </div>
-
-          {/* Visual feature list */}
-          <div className="grid grid-cols-1 gap-4">
-            {[
-              { icon: "factory", title: "Fabricación propia", desc: "Taller propio con maquinaria CNC, plasma y soldadura MIG/TIG." },
-              { icon: "local_shipping", title: "Transporte e instalación", desc: "Flota de transporte y equipo de montaje en obra incluido en el precio." },
-              { icon: "draw", title: "Diseño a medida", desc: "Planos estructurales y maqueta 3D antes de fabricar. Sin sorpresas." },
-              { icon: "shield", title: "Garantía escrita", desc: "Todos nuestros trabajos incluyen garantía por escrito. Sin excepciones." },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="flex items-start gap-4 bg-dark-900 border border-white/5 rounded-xl p-5"
-              >
-                <div className="w-10 h-10 bg-brand/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
-                  <span className="material-symbols-outlined text-brand text-xl">{item.icon}</span>
-                </div>
-                <div>
-                  <h4 className="font-display font-bold text-base mb-1">{item.title}</h4>
-                  <p className="text-white/40 text-sm leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA Banner ── */}
-      <section className="py-16 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-brand/5 border-y border-brand/10" />
-        <div className="absolute inset-0 opacity-5"
-          style={{
-            backgroundImage: "linear-gradient(45deg, #3b82f6 25%, transparent 25%, transparent 75%, #3b82f6 75%), linear-gradient(45deg, #3b82f6 25%, transparent 25%, transparent 75%, #3b82f6 75%)",
-            backgroundSize: "20px 20px",
-            backgroundPosition: "0 0, 10px 10px",
-          }}
-        />
-        <div className="relative max-w-4xl mx-auto text-center">
-          <h2 className="font-display font-black text-3xl md:text-5xl mb-4">
-            ¿Tienes un proyecto en mente?
-          </h2>
-          <p className="text-white/50 text-lg mb-8 max-w-xl mx-auto">
-            Cuéntanos qué necesitas. Visita técnica y presupuesto sin costo, en
-            24 horas hábiles.
-          </p>
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-brand hover:bg-brand-dark text-white font-bold px-10 py-5 rounded-xl text-xl transition-all hover:scale-105 shadow-2xl shadow-brand/20"
-          >
-            <span className="material-symbols-outlined text-2xl">chat</span>
-            Escribir por WhatsApp
-          </a>
         </div>
       </section>
 
       {/* ── Contacto ── */}
-      <section id="contacto" className="py-24 px-4">
+      <section id="contacto" className="py-24 md:py-32 px-4 bg-yellow-500 text-zinc-950">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-brand text-sm font-semibold tracking-widest uppercase mb-3">
-              Estamos aquí
-            </p>
-            <h2 className="font-display font-black text-4xl md:text-5xl">
-              <span className="text-brand">Contacto</span>
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12 items-start">
-            <div className="space-y-6">
-              <div className="flex items-start gap-4 bg-dark-800 border border-white/5 rounded-2xl p-6">
-                <div className="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center shrink-0">
-                  <span className="material-symbols-outlined text-brand text-2xl">chat</span>
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <p className="text-zinc-800 text-sm font-black tracking-widest uppercase mb-4">
+                El primer paso
+              </p>
+              <h2 className="font-display font-black text-5xl md:text-6xl uppercase tracking-tight mb-8">
+                Hagamos que tu proyecto tome <span className="text-white">forma</span>.
+              </h2>
+              
+              <div className="space-y-8 mb-10">
+                <div className="flex items-start gap-4">
+                  <div className="mt-1">
+                    <span className="material-symbols-outlined text-3xl text-zinc-900">phone_iphone</span>
+                  </div>
+                  <div>
+                    <p className="font-black uppercase tracking-wide mb-1">WhatsApp / Teléfono</p>
+                    <a href={whatsappUrl} className="text-2xl font-bold hover:text-white transition-colors">
+                      {businessInfo.phone}
+                    </a>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-display font-bold text-lg mb-1">WhatsApp</h3>
-                  <p className="text-white/40 text-sm mb-3">
-                    La forma más rápida de comunicarte con nosotros.
-                  </p>
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 text-[#25D366] font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors"
-                  >
-                    <span className="material-symbols-outlined text-base">open_in_new</span>
-                    {businessInfo.phone}
-                  </a>
+
+                <div className="flex items-start gap-4">
+                  <div className="mt-1">
+                    <span className="material-symbols-outlined text-3xl text-zinc-900">email</span>
+                  </div>
+                  <div>
+                    <p className="font-black uppercase tracking-wide mb-1">Correo Electrónico</p>
+                    <a href={`mailto:${businessInfo.email}`} className="text-xl font-bold hover:text-white transition-colors">
+                      {businessInfo.email}
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="mt-1">
+                    <span className="material-symbols-outlined text-3xl text-zinc-900">location_on</span>
+                  </div>
+                  <div>
+                    <p className="font-black uppercase tracking-wide mb-1">Cobertura</p>
+                    <p className="text-xl font-bold">
+                      {businessInfo.address}
+                    </p>
+                  </div>
                 </div>
               </div>
-
-              <div className="flex items-start gap-4 bg-dark-800 border border-white/5 rounded-2xl p-6">
-                <div className="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center shrink-0">
-                  <span className="material-symbols-outlined text-brand text-2xl">location_on</span>
-                </div>
-                <div>
-                  <h3 className="font-display font-bold text-lg mb-1">Ubicación</h3>
-                  <p className="text-white/40 text-sm">{businessInfo.address}</p>
-                  <p className="text-white/40 text-sm mt-1">Atendemos proyectos en toda la Región Metropolitana.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4 bg-dark-800 border border-white/5 rounded-2xl p-6">
-                <div className="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center shrink-0">
-                  <span className="material-symbols-outlined text-brand text-2xl">schedule</span>
-                </div>
-                <div>
-                  <h3 className="font-display font-bold text-lg mb-1">Horario de atención</h3>
-                  <p className="text-white/40 text-sm">Lunes a Viernes: 8:00 – 18:00</p>
-                  <p className="text-white/40 text-sm">Sábado: 9:00 – 13:00</p>
-                </div>
-              </div>
-
+              
               <a
-                href={`https://www.instagram.com/${businessInfo.instagram}`}
+                href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-4 bg-dark-800 border border-white/5 hover:border-white/15 rounded-2xl p-6 transition-colors group"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-zinc-950 hover:bg-zinc-800 text-white font-bold px-10 py-5 rounded-sm text-lg uppercase tracking-widest transition-all shadow-xl"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center shrink-0">
-                  <span className="material-symbols-outlined text-pink-400 text-2xl">photo_camera</span>
-                </div>
-                <div>
-                  <h3 className="font-display font-bold text-lg mb-1 group-hover:text-brand transition-colors">Instagram</h3>
-                  <p className="text-white/40 text-sm">@{businessInfo.instagram}</p>
-                </div>
-                <span className="material-symbols-outlined text-white/20 ml-auto">open_in_new</span>
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                   <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.522 5.845L0 24l6.335-1.502A11.96 11.96 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 0 1-5.031-1.377l-.36-.214-3.761.892.938-3.66-.236-.375A9.818 9.818 0 0 1 2.182 12c0-5.418 4.4-9.818 9.818-9.818 5.418 0 9.818 4.4 9.818 9.818 0 5.418-4.4 9.818-9.818 9.818z" />
+                </svg>
+                Iniciar en WhatsApp
               </a>
             </div>
 
             {/* Map */}
-            <div className="rounded-2xl overflow-hidden h-96 md:h-full min-h-[400px] border border-white/5">
+            <div className="h-[450px] lg:h-[600px] border-4 border-zinc-950 p-2 bg-zinc-950 shadow-2xl relative">
               <iframe
                 src={businessInfo.googleMapsEmbedUrl}
                 width="100%"
                 height="100%"
-                style={{ border: 0, filter: "invert(90%) hue-rotate(180deg)" }}
+                style={{ border: 0, filter: "grayscale(80%) contrast(120%)" }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Ubicación Dittmar Estructuras Metálicas"
+                title="Google Maps Zona de Cobertura Dittmar"
+                className="bg-zinc-800"
               />
+               <div className="absolute top-4 right-4 bg-zinc-950 text-yellow-500 font-bold px-4 py-2 text-xs uppercase tracking-widest">
+                 Base de operaciones
+               </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer className="bg-dark-950 border-t border-white/5 py-10 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            {/* Logo */}
-            <a href="#inicio" className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-lg">architecture</span>
-              </div>
-              <div className="leading-tight">
-                <div className="font-display font-bold text-sm text-white">DITTMAR</div>
-                <div className="text-[9px] text-white/30 tracking-widest uppercase">Estructuras Metálicas</div>
-              </div>
-            </a>
-
-            <p className="text-white/20 text-sm text-center">
-              © {new Date().getFullYear()} Dittmar Estructuras Metálicas. Santiago, Chile.
-            </p>
-
-            <div className="flex items-center gap-4">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/30 hover:text-[#25D366] transition-colors text-sm"
-              >
-                WhatsApp
-              </a>
-              <a
-                href={`https://www.instagram.com/${businessInfo.instagram}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/30 hover:text-brand transition-colors text-sm"
-              >
-                Instagram
-              </a>
+      <footer className="bg-zinc-950 py-12 px-4 border-t-8 border-yellow-500 text-center md:text-left">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+          <a href="#inicio" className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-yellow-500 rounded flex items-center justify-center">
+              <span className="material-symbols-outlined text-zinc-950 text-2xl font-bold">architecture</span>
             </div>
+            <div className="leading-tight text-left">
+              <div className="font-display font-extrabold text-sm text-white tracking-widest uppercase">DITTMAR</div>
+              <div className="text-[10px] text-zinc-500 font-medium uppercase tracking-widest">Estructuras Metálicas</div>
+            </div>
+          </a>
+
+          <p className="text-zinc-500 font-medium text-sm font-sans">
+            © {new Date().getFullYear()} Dittmar Estructuras Metálicas. Santiago, Chile.
+          </p>
+
+          <div className="flex items-center gap-6">
+            <a
+              href={`https://www.instagram.com/${businessInfo.instagram}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-400 hover:text-yellow-500 transition-colors uppercase text-sm font-bold tracking-widest"
+            >
+              Instagram
+            </a>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-400 hover:text-yellow-500 transition-colors uppercase text-sm font-bold tracking-widest"
+            >
+              WhatsApp
+            </a>
           </div>
         </div>
       </footer>
